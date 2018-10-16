@@ -24,7 +24,8 @@ participant User identified by userID {
   o String userID
   o String firstName
   o String lastName
-  o Integer balance
+  o Integer USDbalance
+  o Integer INRbalance
 }
 transaction Issue {
   --> Currency currency
@@ -35,4 +36,5 @@ transaction Transfer {
   --> User sender
   --> User reciever
   o Integer amount
+  o String currencySymbol
 }
