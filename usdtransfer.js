@@ -6,11 +6,11 @@
 
 async function USDFundTransfer(transaction) {
     let exchangeRate = await request.get({uri:'https://free.currencyconverterapi.com/api/v5/convert?q=USD_INR&compact=y', json:true})
-    const senderBalance = transfer.sender.balance
-    const recieverBalance = transfer.reciever.balance
+    const senderBalance = transfer.sender.USDbalance
+    const recieverBalance = transfer.reciever.USDbalance
     if(senderBalance >= transfer.amount) {
-      transfer.reciever.balance = recieverBalance + (transfer.amount * exchangeRate.USD_INR.val) // INR Account
-      transfer.sender.balance = senderBalance - transfer.amount // USD Account
+      transfer.reciever.USDbalance = recieverBalance + (transfer.amount * exchangeRate.USD_INR.val) // INR Account
+      transfer.sender.USDbalance = senderBalance - transfer.amount // USD Account
     } else {
       alert("Insufficient fund")
     }
