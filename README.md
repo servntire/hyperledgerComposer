@@ -45,7 +45,7 @@ asset Currency identified by currencySymbol {
 }
 ```
 ***Structure for Asset Definition***
-```JS
+```js
 // String, Integer, Double, State, DateTime, Boolean
 asset AssetName identified by keyword {
   o dataType fieldName
