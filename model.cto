@@ -34,7 +34,7 @@ transaction Issue {
 }
 transaction Transfer {
   --> User sender
-  --> User reciever
+  --> User receiver
   o Integer amount
   o String currencySymbol
 }

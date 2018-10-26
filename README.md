@@ -134,3 +134,37 @@ async function issueMoney(issue) {
   await assetRegistry.update(issue.currency);
 }
 ```
+## 7. Defining Transaction between participants.
+First we have to define the transaction model. For that open model.cto and add following code.
+1. Model definition
+```js
+transaction Transfer {
+  --> User sender
+  --> User receiver
+  o Integer amount
+}
+```
+2. Defining the transaction
+Now we have to define the transaction based on the model defined.
+Add a new script file. Name it as `transfer.js`
+```js
+/**
+* Transfer of fund from one user to another
+* @param {com.netobjex.payment.Transfer} transfer - fund transfer between users
+* @transaction
+*/
+async function fundTransfer(transfer) {
+    const senderBalance = transfer.sender.balance
+    const receiverBalance = transfer.receiver.balance
+    if(senderBalance >= transfer.amount) {
+      transfer.receiver.balance = recieverBalance + transfer.amount
+      transfer.sender.balance = senderBalance - transfer.amount
+    } else {
+      alert("Insufficient fund")
+    }
+
+  let participantRegistry = await getParticipantRegistry("com.netobjex.payment.User")
+  await participantRegistry.update(transfer.receiver)
+  await participantRegistry.update(transfer.sender)
+}
+```
