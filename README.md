@@ -168,3 +168,4 @@ async function fundTransfer(transfer) {
   await participantRegistry.update(transfer.sender)
 }
 ```
+3. Deploy and Test like we did before.
