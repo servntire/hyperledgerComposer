@@ -44,7 +44,7 @@ asset Currency identified by currencySymbol {
   o Integer liquidity
 }
 ```
-***Generic Structure for Asset Definition***
+***Generic Structure for Asset Definition - Do not Use in code***
 ```js
 // String, Integer, Double, State, DateTime, Boolean
 asset AssetName identified by keyword {
@@ -60,7 +60,7 @@ participant User identified by userID {
   o Integer balance
 }
 ```
-***Generic Structure for Participant Definition***
+***Generic Structure for Participant Definition - Do not Use in code***
 ```js
 // String, Integer, Double, State, DateTime, Boolean
 participant ParticipantModel identified by keyword {
@@ -75,7 +75,7 @@ transaction Issue {
   o Integer amount
 }
 ```
-***Generic Structure for Transaction Definition***
+***Generic Structure for Transaction Definition - Do not Use in code***
 ```js
 // String, Integer, Double, State, DateTime, Boolean
 transaction TransactionName {
