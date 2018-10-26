@@ -36,7 +36,7 @@ The Hyperledger Composer is mainly consist of 4 building blocs.
 First we are going to do is defining Asset, Participants and Transaction models in the `model.cto` file.
 1. Define the namespace as `com.netobjex.payment`
 2. Defining Currency as asset.
-```JS
+```js
 asset Currency identified by currencySymbol {
   o String currencyName
   o String currencySymbol
@@ -49,5 +49,88 @@ asset Currency identified by currencySymbol {
 // String, Integer, Double, State, DateTime, Boolean
 asset AssetName identified by keyword {
   o dataType fieldName
+}
+```
+3. Defining Participants model
+```js
+participant User identified by userID {
+  o String userID
+  o String firstName
+  o String lastName
+  o Integer balance
+}
+```
+***Structure for Participant Definition***
+```js
+// String, Integer, Double, State, DateTime, Boolean
+participant ParticipantModel identified by keyword {
+  o dataType fieldName
+}
+```
+4. Defining Transaction
+```js
+transaction Issue {
+  --> Currency currency // Inheriting the model of Currency to currency
+  --> User recipientUser // Inherting the model of User to recipientUser
+  o Integer amount
+}
+```
+***Structure for Transaction Definition***
+```js
+// String, Integer, Double, State, DateTime, Boolean
+transaction TransactionName {
+  o dataType fieldName
+}
+```
+5. Click on Add a file to Include a script file. Name it as `issue.js`
+6. Here we are going to define the definition for Issue. (The transaction we defined above)
+```js
+/**
+ * Issue money from bank to a user
+ * @param {com.netobjex.payment.Issue} issue - issue of money to user
+ * @transaction
+ */
+ async function issueMoney(issue) {
+   issue.recipientUser.balance = issue.amount // Updating the Balance with Input Amount.
+   let participantRegistry = await getParticipantRegistry('com.netobjex.payment.User'); // Retrieving Participant Registry
+   await participantRegistry.update(issue.recipientUser);
+ }
+ ```
+ 7. Deploy changes and Click on Test.
+ ![Deploy Network](docs/images/5.png)
+ 8. Create Participant
+ ![Create Participant](docs/images/6.png)
+ ![Create Participant with Values](docs/images/7.png)
+ 9. Create Asset
+ ![Create Asset](docs/images/8.png)
+ 10. Submit a Transaction
+ ![Submit a Transaction](docs/images/9.png)
+
+## 6. Let's add more functionalities to it.
+***Currently the problem is, balance is overwriting rather than adding it into the existing balance.***
+Let's modify the `issueMoney` function in `issue.js` file slightly to add more functionality.
+```js
+async function issueMoney(issue) {
+  const currentBalance = issue.recipientUser.balance
+  issue.recipientUser.balance = issue.amount + currentBalance  
+  let participantRegistry = await getParticipantRegistry('com.netobjex.payment.User');
+  await participantRegistry.update(issue.recipientUser);
+}
+```
+***Let's do a validation now, to check whether the issuer have enough fund before issuing the amount.***
+```js
+async function issueMoney(issue) {
+  const liquidity = issue.currency.liquidity
+  const currentBalance = issue.recipientUser.balance
+  if(liquidity >= issue.amount) {
+    issue.recipientUser.balance = issue.amount + currentBalance
+    issue.currency.liquidity = liquidity - issue.amount
+  } else {
+    alert("Insufficient fund in Bank")
+  }
+  let participantRegistry = await getParticipantRegistry('com.netobjex.payment.User');
+  let assetRegistry = await getAssetRegistry('com.netobjex.payment.Currency');
+  await participantRegistry.update(issue.recipientUser);
+  await assetRegistry.update(issue.currency);
 }
 ```
